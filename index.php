@@ -14,7 +14,8 @@ function read_file($file, $lines) {
 		$t = " ";
 		while ($t != "\n") {
 			if(fseek($handle, $pos, SEEK_END) == -1) {
-				$beginning = true; break; }
+				$beginning = true; break;
+			}
 			$t = fgetc($handle);
 			$pos --;
 		}
@@ -46,15 +47,22 @@ else {
 		}
 	}
 	if ($alert) {
-		echo '<html><body style="background-color: #f00; color: #fff;">
-		<h1>ALERT!</h1>
-		<embed height="50" width="300" src="alert.mp3">
-		</body></html>';
+		$template['bodyStyle'] = 'background-color: #f00; color: #fff;';
+		$template['title'] = 'ALERT!';
+		$template['timer'] = 300000;
 	}
 	else {
-		echo '<html><head></head>
-		<body onload="JavaScript:setTimeout(\'location.reload(true);\',60000);">
-		<h1>OK</h1>'.$lastLogs.'</body></html>';
+		$template['bodyStyle'] = '';
+		$template['title'] = 'OK';
+		$template['timer'] = 60000;
 	}
+	?>
+		<html><body style="<?php echo $template['bodyStyle']?>" onload="JavaScript:setTimeout('location.reload(true);',<?php echo $template['timer']?>);">
+			v.0.2
+			<h1><?php echo $template['title']?></h1>
+			<?php echo $lastLogs?>
+			<?php if($alert):?><br /><embed height="50" width="300" src="alert.mp3"><?php endif;?>
+		</body></html>
+	<?php
 }
 ?>
