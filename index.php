@@ -57,12 +57,36 @@ else {
 		$template['timer'] = 60000;
 	}
 	?>
-		<html><body style="<?php echo $template['bodyStyle']?>" onload="JavaScript:setTimeout('location.reload(true);',<?php echo $template['timer']?>);">
-			v.0.2
+		<html>
+		<head>
+			<script src="jquery-2.0.3.min.js"></script>
+		</head>
+		<body style="<?php echo $template['bodyStyle']?>">
+			v.0.3 (<span class="timer"></span>s)
 			<h1><?php echo $template['title']?></h1>
 			<?php echo $lastLogs?>
 			<?php if($alert):?><br /><embed height="50" width="300" src="alert.mp3"><?php endif;?>
-		</body></html>
+			<script>
+				var timeLeft = <?php echo $template['timer']?>;
+				function timer() {
+					timeLeft -= 1000;
+					$('.timer').text(timeLeft / 1000);
+					if (timeLeft <= 0) {
+						location.reload(true);
+					}
+					else {
+						setTimeout(
+							timer,
+							1000
+						);
+					}
+				};
+				$(function() {
+					timer();
+				});
+			</script>
+		</body>
+		</html>
 	<?php
 }
 ?>
